@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html ng-app="chat">
+<head>
+  <link rel="stylesheet" type="text/css" href="/app.css">
+</head>
+<body>
+  <div ng-controller="ChatCtrl">
+    <ul class="messages">
+      <li class="{{message.type}}"
+        ng-repeat="message in messages track by $index">
+        <span class="user" ng-if="message.user">{{message.user}} </span>@
+        <span class="date">{{message.date|date:"hh:mm a"}}</span> —
+        {{message.message}}</li>
+    </ul>
+    <form ng-submit="sendMessage()">
+      <input type="text" ng-model="messageText" placeholder="Type your message here" autofocus>
+    </form>
+  </div>
+  <script src="//d1fxtkz8shb9d2.cloudfront.net/sockjs-0.3.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.20/angular.min.js"></script>
+  <script src="/app.js"></script>
+</body>

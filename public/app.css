@@ -1,0 +1,15 @@
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Open Sans'), local('OpenSans'), url(//themes.googleusercontent.com/static/fonts/opensans/v8/cJZKeOuBrn4kERxqtaUH3T8E0i7KZn-EPnyo3HZu7kw.woff) format('woff');
+}
+* { font-family: "Open Sans"; margin: 0; padding: 0; box-sizing: border-box; }
+.messages { list-style-type: none; padding: 0; overflow-y: scroll; }
+.messages li { padding: 0.5em; }
+.messages li:nth-child(even) { background: rgba(0, 0, 0, 0.125); }
+.user { font-weight: bold; }
+.join { color: green; font-style: italic; }
+.part { color: red; font-style: italic; }
+form { position: fixed; bottom: 0; width: 100%; padding: 1em; }
+input { width: inherit; font-size: 1.5em; }

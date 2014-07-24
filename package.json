@@ -1,0 +1,12 @@
+{
+  "name": "angular-chat",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node server"
+  },
+  "dependencies": {
+    "sockjs": "^0.3.9",
+    "express": "^4.6.1"
+  }
+}
