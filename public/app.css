@@ -9,7 +9,7 @@ body { font-family: "Open Sans"; font-size: 0.75em; }
 .messages { list-style-type: none; padding: 0; overflow-y: scroll; }
 .messages li { padding: 0.5em; }
 .messages li:nth-child(even) { background: rgba(0, 0, 0, 0.125); }
-.user { font-weight: bold; }
+.nick { font-weight: bold; }
 .join { color: green; font-style: italic; }
 .part { color: red; font-style: italic; }
 form { position: fixed; bottom: 0; width: 100%; padding: 1em; }

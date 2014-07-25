@@ -23,14 +23,14 @@ connections.emit = function(msg) {
 socket.on("connection", function(conn) {
 
   // on connect
-  var user = "User " + (currentIndex += 1);
+  conn.nick = "User " + (currentIndex += 1);
   connections.push(conn);
-  connections.emit({type: "join", message: user + " connected. There are " + connections.length + " users online now."});
+  connections.emit({type: "join", message: conn.nick + " connected. There are " + connections.length + " users online now."});
 
   // on disconnect
   conn.on("close", function() {
     connections.splice(connections.indexOf(conn), 1);
-    connections.emit({type: "part", message: user + " disconnected. There are " + connections.length + " users online now."});
+    connections.emit({type: "part", message: conn.nick + " disconnected. There are " + connections.length + " users online now."});
 
     // if all users have disconnected, reset currentIndex
     if (connections.length == 0) {
@@ -41,7 +41,7 @@ socket.on("connection", function(conn) {
   // on message
   conn.on("data", function(message) {
     if (message.length > 0) {
-      connections.emit({type: "message", user: user, message: message});
+      connections.emit({type: "message", nick: conn.nick, message: message});
     }
   });
 
