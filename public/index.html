@@ -13,8 +13,10 @@
       </li>
       <li class="{{message.type}}"
         ng-repeat="message in messages track by $index">
-        <span class="nick" ng-if="message.nick">{{message.nick}} </span>@
-        <span class="date">{{message.date|date:"hh:mm a"}}</span> —
+        <span class="meta">
+          <span class="nick" ng-if="message.nick">{{message.nick}} </span>@
+          <span class="date">{{message.date|date:"hh:mm a"}}</span> —
+        </span>
         {{message.text}}</li>
     </ul>
     <form ng-submit="sendMessage()">
