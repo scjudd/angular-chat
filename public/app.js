@@ -43,10 +43,13 @@
 
   app.controller("ChatCtrl", function($scope, $window, deserializeMessage) {
     $scope.messages = [];
+    $scope.messageText = "";
 
     $scope.sendMessage = function() {
-      sock.send($scope.messageText);
-      $scope.messageText = "";
+      if ($scope.messageText.length > 0) {
+        sock.send($scope.messageText);
+        $scope.messageText = "";
+      }
     };
 
     sock.onmessage = function(e) {

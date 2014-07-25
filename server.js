@@ -40,7 +40,9 @@ socket.on("connection", function(conn) {
 
   // on message
   conn.on("data", function(message) {
-    connections.emit({type: "message", user: user, message: message});
+    if (message.length > 0) {
+      connections.emit({type: "message", user: user, message: message});
+    }
   });
 
 });
