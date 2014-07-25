@@ -12,44 +12,48 @@
     };
   });
 
+  app.directive("refocus", function($document) {
+    return function(scope, elem, attrs) {
+      elem.on("blur", function() {
+        $document.one("keypress", elem[0].focus);
+      });
+      elem[0].focus();
+    };
+  });
+
+  app.directive("heightDifference", function($window) {
+    return function(scope, elem, attrs) {
+      function resize() {
+        var rh = parseInt(attrs.heightDifference);
+        elem[0].style.height = ($window.innerHeight - rh) + "px";
+      }
+      angular.element($window).on("resize", resize);
+      resize();
+    };
+  });
+
+  app.directive("autoscroll", function() {
+    return function(scope, elem, attrs) {
+      var scrollHeight = function() { return elem[0].scrollHeight; };
+      scope.$watch(scrollHeight, function() {
+        elem[0].scrollTop = scrollHeight();
+      });
+    };
+  });
+
   app.controller("ChatCtrl", function($scope, $window, parseMessage) {
-
-    // elements
-    var input = document.querySelector("input");
-    var messages = document.querySelector(".messages");
-
-    // received messages
     $scope.messages = [];
 
-    // send message
     $scope.sendMessage = function() {
       sock.send($scope.messageText);
       $scope.messageText = "";
     };
 
-    // on messages receive
     sock.onmessage = function(e) {
       var msg = parseMessage(e.data);
       $scope.messages.push(msg);
       $scope.$apply();
-      messages.scrollTop = messages.scrollHeight;
     };
-
-    // resize messages container on load/resize
-    function resizeMessagesContainer() {
-      messages.style.height = $window.innerHeight - 69 + "px";
-    }
-    angular.element($window).bind("resize", resizeMessagesContainer);
-    resizeMessagesContainer();
-
-    // focus input on keypress
-    angular.element(input).bind("blur", function() {
-      angular.element(document).bind("keypress", function(e) {
-        input.focus();
-        angular.element(document).unbind("keypress");
-      });
-    });
-
   });
 
 })();
