@@ -4,7 +4,7 @@
   var app = angular.module("chat", []);
   var sock = new SockJS("/chat");
 
-  app.service("parseMessage", function() {
+  app.service("deserializeMessage", function() {
     return function(serialized) {
       var msg = JSON.parse(serialized);
       if (msg.date) msg.date = new Date(msg.date);
@@ -41,7 +41,7 @@
     };
   });
 
-  app.controller("ChatCtrl", function($scope, $window, parseMessage) {
+  app.controller("ChatCtrl", function($scope, $window, deserializeMessage) {
     $scope.messages = [];
 
     $scope.sendMessage = function() {
@@ -50,7 +50,7 @@
     };
 
     sock.onmessage = function(e) {
-      var msg = parseMessage(e.data);
+      var msg = deserializeMessage(e.data);
       $scope.messages.push(msg);
       $scope.$apply();
     };

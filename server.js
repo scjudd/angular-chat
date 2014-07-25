@@ -9,10 +9,14 @@ app.use(express.static(__dirname + "/public"));
 var currentIndex = 0;
 var connections = [];
 
+function serializeMessage(msg) {
+  msg.date = new Date();
+  return JSON.stringify(msg);
+}
+
 connections.emit = function(msg) {
   for (var i = 0; i < this.length; i++) {
-    msg.date = new Date();
-    this[i].write(JSON.stringify(msg));
+    this[i].write(serializeMessage(msg));
   }
 }
 
