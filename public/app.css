@@ -12,4 +12,5 @@
 .join { color: green; font-style: italic; }
 .part { color: red; font-style: italic; }
 form { position: fixed; bottom: 0; width: 100%; padding: 1em; }
-input { width: inherit; font-size: 1.5em; }
+input { width: inherit; font-size: 1.5em; border: none; }
+input:focus { outline: none; }
