@@ -35,7 +35,7 @@ connections.emit = function(msg) {
 socket.on("connection", function(conn) {
 
   // on connect
-  conn.nick = "User " + (currentIndex += 1);
+  conn.nick = "User" + (currentIndex += 1);
   connections.push(conn);
   connections.emit({type: "join", text: conn.nick + " connected. There are " + connections.length + " users online now."});
 
@@ -53,6 +53,7 @@ socket.on("connection", function(conn) {
   // on message
   conn.on("data", function(msg) {
     msg = deserializeMessage(msg);
+    console.log(msg);
     switch (msg.type) {
     case "message":
       connections.emit({type: "message", nick: conn.nick, text: msg.text});
