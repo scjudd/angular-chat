@@ -12,13 +12,19 @@
     };
   });
 
+  // NOTE: This directive only makes sense in the context of a single
+  // element requiring keyboard interaction.
   app.directive("refocus", function($document) {
     return function(scope, elem, attrs) {
+      var registered = false;
       elem.on("blur", function() {
-        $document.one("keypress", function(e) {
-          if (e.keyCode != 13) e.stopPropagation();
-          elem[0].focus();
-        });
+        if (!registered) {
+          $document.one("keypress", function() {
+            elem[0].focus();
+            registered = false;
+          });
+          registered = true;
+        }
       });
       elem[0].focus();
     };
