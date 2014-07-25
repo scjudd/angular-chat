@@ -37,12 +37,12 @@ socket.on("connection", function(conn) {
   // on connect
   conn.nick = "User" + (currentIndex += 1);
   connections.push(conn);
-  connections.emit({type: "join", text: conn.nick + " connected. There are " + connections.length + " users online now."});
+  connections.emit({type: "join", id: conn.id, nick: conn.nick, text: conn.nick + " connected. There are " + connections.length + " users online now."});
 
   // on disconnect
   conn.on("close", function() {
     connections.splice(connections.indexOf(conn), 1);
-    connections.emit({type: "part", text: conn.nick + " disconnected. There are " + connections.length + " users online now."});
+    connections.emit({type: "part", id: conn.id, nick: conn.nick, text: conn.nick + " disconnected. There are " + connections.length + " users online now."});
 
     // if all users have disconnected, reset currentIndex
     if (connections.length == 0) {
@@ -56,12 +56,12 @@ socket.on("connection", function(conn) {
     console.log(msg);
     switch (msg.type) {
     case "message":
-      connections.emit({type: "message", nick: conn.nick, text: msg.text});
+      connections.emit({type: "message", id: conn.id, nick: conn.nick, text: msg.text});
       break;
     case "nick":
       var old = conn.nick;
       conn.nick = msg.new.split(" ")[0];
-      connections.emit({type: "nick", old: old, new: conn.nick, text: old + " changed their nick to " + conn.nick + "."});
+      connections.emit({type: "nick", id: conn.id, old: old, new: conn.nick, text: old + " changed their nick to " + conn.nick + "."});
       break;
     }
   });

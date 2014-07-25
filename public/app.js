@@ -82,10 +82,11 @@
 
     sock.onmessage = function(e) {
       var msg = deserializeMessage(e.data);
-      if (msg.nick !== undefined && !(msg.nick in $scope.colors)) {
-        $scope.colors[msg.nick] = getRandomColor();
+      if (msg.id !== undefined) {
+        if (!(msg.id in $scope.colors))
+          $scope.colors[msg.id] = getRandomColor();
+        msg.color = $scope.colors[msg.id];
       }
-      msg.color = $scope.colors[msg.nick];
       $scope.messages.push(msg);
       $scope.$apply();
     };
