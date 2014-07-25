@@ -15,7 +15,10 @@
   app.directive("refocus", function($document) {
     return function(scope, elem, attrs) {
       elem.on("blur", function() {
-        $document.one("keypress", elem[0].focus);
+        $document.one("keypress", function(e) {
+          if (e.keyCode != 13) e.stopPropagation();
+          elem[0].focus();
+        });
       });
       elem[0].focus();
     };
