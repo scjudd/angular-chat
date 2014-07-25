@@ -15,7 +15,7 @@
         ng-repeat="message in messages track by $index">
         <span class="nick" ng-if="message.nick">{{message.nick}} </span>@
         <span class="date">{{message.date|date:"hh:mm a"}}</span> —
-        {{message.message}}</li>
+        {{message.text}}</li>
     </ul>
     <form ng-submit="sendMessage()">
       <input type="text" ng-model="messageText" placeholder="Type your message here" refocus>

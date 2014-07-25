@@ -4,6 +4,10 @@
   var app = angular.module("chat", []);
   var sock = new SockJS("/chat");
 
+  app.service("serializeMessage", function() {
+    return JSON.stringify;
+  });
+
   app.service("deserializeMessage", function() {
     return function(serialized) {
       var msg = JSON.parse(serialized);
@@ -50,13 +54,22 @@
     };
   });
 
-  app.controller("ChatCtrl", function($scope, $window, deserializeMessage) {
+  app.controller("ChatCtrl", function($scope, $window, serializeMessage, deserializeMessage) {
     $scope.messages = [];
     $scope.messageText = "";
 
+    function send(msg) {
+      sock.send(serializeMessage(msg));
+    };
+
     $scope.sendMessage = function() {
       if ($scope.messageText.length > 0) {
-        sock.send($scope.messageText);
+        if ($scope.messageText.indexOf("/nick") == 0) {
+          var nick = $scope.messageText.replace("/nick ","").split(" ")[0];
+          send({type: "nick", new: nick});
+        } else {
+          send({type: "message", text: $scope.messageText});
+        }
         $scope.messageText = "";
       }
     };

@@ -9,8 +9,20 @@ app.use(express.static(__dirname + "/public"));
 var currentIndex = 0;
 var connections = [];
 
+function deserializeMessage(msg) {
+  var msg = JSON.parse(msg);
+  if (msg.date !== undefined) {
+    msg.date = new Date(msg.date);
+  }
+  return msg;
+}
+
 function serializeMessage(msg) {
-  msg.date = new Date();
+  if (msg.date !== undefined) {
+    msg.date = new Date(msg.date);
+  } else {
+    msg.date = new Date();
+  }
   return JSON.stringify(msg);
 }
 
@@ -25,12 +37,12 @@ socket.on("connection", function(conn) {
   // on connect
   conn.nick = "User " + (currentIndex += 1);
   connections.push(conn);
-  connections.emit({type: "join", message: conn.nick + " connected. There are " + connections.length + " users online now."});
+  connections.emit({type: "join", text: conn.nick + " connected. There are " + connections.length + " users online now."});
 
   // on disconnect
   conn.on("close", function() {
     connections.splice(connections.indexOf(conn), 1);
-    connections.emit({type: "part", message: conn.nick + " disconnected. There are " + connections.length + " users online now."});
+    connections.emit({type: "part", text: conn.nick + " disconnected. There are " + connections.length + " users online now."});
 
     // if all users have disconnected, reset currentIndex
     if (connections.length == 0) {
@@ -39,9 +51,17 @@ socket.on("connection", function(conn) {
   });
 
   // on message
-  conn.on("data", function(message) {
-    if (message.length > 0) {
-      connections.emit({type: "message", nick: conn.nick, message: message});
+  conn.on("data", function(msg) {
+    msg = deserializeMessage(msg);
+    switch (msg.type) {
+    case "message":
+      connections.emit({type: "message", nick: conn.nick, text: msg.text});
+      break;
+    case "nick":
+      var old = conn.nick;
+      conn.nick = msg.new.split(" ")[0];
+      connections.emit({type: "nick", old: old, new: conn.nick, text: old + " changed their nick to " + conn.nick + "."});
+      break;
     }
   });
 
