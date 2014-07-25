@@ -2,7 +2,6 @@
   "use strict";
 
   var app = angular.module("chat", []);
-  var sock = new SockJS("/chat");
 
   app.service("serializeMessage", function() {
     return JSON.stringify;
@@ -59,28 +58,21 @@
     $scope.messageText = "";
     $scope.colors = {};
 
-    function getRandomColor() {
-      var hue = Math.floor(Math.random() * 360);
-      return "hsl(" + hue + ", 100%, 30%)"
+    var lastNick;
+    var sock; connect();
+
+    function connect() {
+      sock = new SockJS("/chat");
+      sock.onmessage = onMessage;
+      sock.onclose = onClose;
+      sock.onopen = onOpen;
     }
 
     function send(msg) {
       sock.send(serializeMessage(msg));
-    };
+    }
 
-    $scope.sendMessage = function() {
-      if ($scope.messageText.length > 0) {
-        if ($scope.messageText.indexOf("/nick") == 0) {
-          var nick = $scope.messageText.replace("/nick ","").split(" ")[0];
-          send({type: "nick", new: nick});
-        } else {
-          send({type: "message", text: $scope.messageText});
-        }
-        $scope.messageText = "";
-      }
-    };
-
-    sock.onmessage = function(e) {
+    function onMessage(e) {
       var msg = deserializeMessage(e.data);
       if (msg.id !== undefined) {
         if (!(msg.id in $scope.colors))
@@ -89,6 +81,34 @@
       }
       $scope.messages.push(msg);
       $scope.$apply();
+    }
+
+    function onOpen(e) {
+      if (lastNick) {
+        send({type: "nick", new: lastNick});
+      }
+    }
+
+    function onClose(e) {
+      setTimeout(connect, 5000);
+    }
+
+    function getRandomColor() {
+      var hue = Math.floor(Math.random() * 360);
+      return "hsl(" + hue + ", 100%, 30%)"
+    }
+
+    $scope.sendMessage = function() {
+      if ($scope.messageText.length > 0) {
+        if ($scope.messageText.indexOf("/nick") == 0) {
+          var nick = $scope.messageText.replace("/nick ","").split(" ")[0];
+          lastNick = nick;
+          send({type: "nick", new: nick});
+        } else {
+          send({type: "message", text: $scope.messageText});
+        }
+        $scope.messageText = "";
+      }
     };
   });
 
