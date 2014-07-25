@@ -29,7 +29,7 @@ socket.on("connection", function(conn) {
 
   // on disconnect
   conn.on("close", function() {
-    connections.splice(connections.indexOf(conn));
+    connections.splice(connections.indexOf(conn), 1);
     connections.emit({type: "part", message: user + " disconnected. There are " + connections.length + " users online now."});
 
     // if all users have disconnected, reset currentIndex
