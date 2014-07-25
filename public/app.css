@@ -4,7 +4,8 @@
   font-weight: 400;
   src: local('Open Sans'), local('OpenSans'), url(//themes.googleusercontent.com/static/fonts/opensans/v8/cJZKeOuBrn4kERxqtaUH3T8E0i7KZn-EPnyo3HZu7kw.woff) format('woff');
 }
-* { font-family: "Open Sans"; margin: 0; padding: 0; box-sizing: border-box; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: "Open Sans"; font-size: 0.75em; }
 .messages { list-style-type: none; padding: 0; overflow-y: scroll; }
 .messages li { padding: 0.5em; }
 .messages li:nth-child(even) { background: rgba(0, 0, 0, 0.125); }
