@@ -57,6 +57,12 @@
   app.controller("ChatCtrl", function($scope, $window, serializeMessage, deserializeMessage) {
     $scope.messages = [];
     $scope.messageText = "";
+    $scope.colors = {};
+
+    function getRandomColor() {
+      var hue = Math.floor(Math.random() * 360);
+      return "hsl(" + hue + ", 100%, 30%)"
+    }
 
     function send(msg) {
       sock.send(serializeMessage(msg));
@@ -76,6 +82,10 @@
 
     sock.onmessage = function(e) {
       var msg = deserializeMessage(e.data);
+      if (msg.nick !== undefined && !(msg.nick in $scope.colors)) {
+        $scope.colors[msg.nick] = getRandomColor();
+      }
+      msg.color = $scope.colors[msg.nick];
       $scope.messages.push(msg);
       $scope.$apply();
     };

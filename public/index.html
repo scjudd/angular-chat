@@ -11,7 +11,7 @@
         <a href="http://github.com/scjudd/angular-chat" target="_blank">GitHub</a>
         and send a Pull Request!
       </li>
-      <li class="{{message.type}}"
+      <li class="{{message.type}}" style="color: {{message.color}}"
         ng-repeat="message in messages track by $index">
         <span class="meta">
           <span class="nick" ng-if="message.nick">{{message.nick}} </span>@
