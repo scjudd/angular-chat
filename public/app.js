@@ -1,7 +1,11 @@
 (function() {
   "use strict";
 
-  var app = angular.module("chat", []);
+  var app = angular.module("chat", ["sockjs"]);
+
+  app.factory("chatSocket", function(sockjsFactory) {
+    return sockjsFactory({url: "/chat"});
+  });
 
   app.service("serializeMessage", function() {
     return JSON.stringify;
